@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>FW STATS</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            function send_username(){
+                var username =  $('#username').val();
+                $('#download_status').text('Pobieranie danych dla użytkownika '+ username+'...');
+                $.ajax({
+                    type: 'POST',
+                    url: '/scrape',
+                    contentType: 'application/json;charset=UTF-8',
+                    timeout: 600000, 
+                    data: JSON.stringify({ 'username' : username })
+                })
+                .fail(function(jqXHR, textStatus, errorThrown){
+                    $('#download_status').text('Wystąpił problem w kontakcie z serwerem.');
+                    alert( "Request failed: " + textStatus + ". Error: "+ errorThrown);
+                })
+                .done(function(data){
+                    $('#download_status').text(data);
+                    window.location = '/result'
+                });
+            }
+        </script>
+    </head>
+    <body>
+        
+            <h3>Nazwa użytkownika:</h3><br>
+            <input type="text" name="username" id="username"><br><br>
+        
+        <button type="button" onclick=send_username()>Tutej</button><br><br>
+        <h1 id="download_status"> </h1> <br/><br/>
+
+    </body>
+</html>
